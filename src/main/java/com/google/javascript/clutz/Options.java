@@ -2,7 +2,9 @@ package com.google.javascript.clutz;
 
 import com.google.common.collect.Sets;
 import com.google.javascript.jscomp.CheckLevel;
+import com.google.javascript.jscomp.CompilationLevel;
 import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.CompilerOptions.LanguageMode;
 import com.google.javascript.jscomp.DependencyOptions;
 import com.google.javascript.jscomp.DiagnosticGroups;
 import com.google.javascript.jscomp.parsing.Config;
@@ -76,35 +78,13 @@ public class Options {
 
   public CompilerOptions getCompilerOptions() {
     final CompilerOptions options = new CompilerOptions();
-    options.setClosurePass(true);
 
-    DependencyOptions deps = new DependencyOptions();
-    deps.setDependencySorting(true);
-    options.setDependencyOptions(deps);
-
-    if (!this.entryPoints.isEmpty()) {
-      options.setManageClosureDependencies(this.entryPoints);
-    }
-
-    // All diagnostics are WARNINGs (or off) and thus ignored unless debug == true.
-    // Only report issues (and fail for them) that are specifically causing problems for Clutz.
-    // The idea is to not do a general sanity check of Closure code, just make sure Clutz works.
-    // Report missing types as errors.
-    options.setCheckGlobalNamesLevel(CheckLevel.ERROR);
-    // Report duplicate definitions, e.g. for accidentally duplicated externs.
-    options.setWarningLevel(DiagnosticGroups.DUPLICATE_VARS, CheckLevel.ERROR);
-
-    // Late Provides are errors by default, but they do not prevent clutz from transpiling.
-    options.setWarningLevel(DiagnosticGroups.LATE_PROVIDE, CheckLevel.OFF);
-
-    options.setLanguage(CompilerOptions.LanguageMode.ECMASCRIPT_2015);
-    options.setLanguageOut(CompilerOptions.LanguageMode.ECMASCRIPT5);
-    options.setCheckTypes(true);
-    options.setInferTypes(true);
-    // turns off optimizations.
-    options.setChecksOnly(true);
+    options.setAssumeForwardDeclaredForMissingTypes(true);
+    options.setLanguageIn(LanguageMode.ECMASCRIPT_2015);
+    options.setStrictModeInput(true);
+    options.setLanguageOut(LanguageMode.ECMASCRIPT5);
     options.setPreserveDetailedSourceInfo(true);
-    options.setParseJsDocDocumentation(Config.JsDocParsing.INCLUDE_DESCRIPTIONS_NO_WHITESPACE);
+    CompilationLevel.ADVANCED_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
     return options;
   }
 
