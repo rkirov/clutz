@@ -49,9 +49,8 @@ reproducible this way, then you have a closure type error in your code (or a
 bug in Closure Compiler).
 
 ## Supported Version of TypeScript
-Clutz produces declaration files that are guaranteed to be accepted by a
-version of TypeScript
-[2.7.2](https://github.com/Microsoft/TypeScript/tree/v2.7.2). The current test
+Clutz produces declaration files that are guaranteed to be accepted by TypeScript
+version [2.9.2](https://github.com/Microsoft/TypeScript/tree/v2.9.2). The current test
 suite runs against the version of `typescript` in `npm-shrinkwrap.json`, so that is
 always a good choice.
 
